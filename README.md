@@ -8,8 +8,15 @@
 ## テスト方法
 1. リポジトリをクローンして、`spring-authorization-server-sample`と`resource-server-sample`を起動する。
 
+2. 認証情報を持たずにリソースサーバーのAPIを呼び出して401エラーが返ってくることを確認する。
+```
+curl http://localhost:8080 -i
 
-2. 認可サーバーにクライアントを追加する。
+# response
+401エラー
+```
+
+3. 認可サーバーにクライアントを追加する。
 ```
 curl -X POST http://localhost:9000/clients
 
@@ -17,7 +24,7 @@ curl -X POST http://localhost:9000/clients
 {"clientId":<client_id>,"clientSecret":<client_secret>}
 ```
 
-3. 認可サーバーから認可トークンを取得する。
+4. 認可サーバーから認可トークンを取得する。
 ```
 curl -X POST "http://localhost:9000/oauth2/token" -H "Content-Type: application/x-www-form-urlencoded" -u "<client_id>:<client_secret>" -d "grant_type=client_credentials&scope=read"
 
@@ -25,10 +32,10 @@ curl -X POST "http://localhost:9000/oauth2/token" -H "Content-Type: application/
 {"access_token":"<token>","scope":"read","token_type":"Bearer","expires_in":599}
 ```
 
-4. 取得したトークンを使用して、リソースサーバーのAPIを呼び出す。
+5. 取得したトークンを使用して、リソースサーバーのAPIを呼び出す。
 ```
 curl http://localhost:8080 -H "Authorization: Bearer <token>"
 
 # response
-Successfully accessed the resource server with clientId: 23b413c4-7643-4358-8ce9-f17ba88f135c
+Successfully accessed the resource server with clientId: <client_id>
 ```
